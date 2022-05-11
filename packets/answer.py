@@ -1,10 +1,13 @@
 from opcode import OpCode
+from utils import xor_encode
 
 
 class Answer:
-    def __init__(self):
+    def __init__(self, data: str, key: str):
         self.opcode = OpCode.answer.value
+        self.data = data
+        self.key = key
 
-    def construct_datagram(self, data) -> bytes:
-        packet = (str(self.opcode) + data).encode("utf-8")
-        return bytearray(packet)
+    def construct_datagram(self) -> bytes:
+        packet = str(self.opcode) + self.data
+        return xor_encode(packet, self.key)
