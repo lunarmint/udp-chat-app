@@ -1,18 +1,20 @@
-import typer
 import socket
 from threading import Event
-from packets.auth import Auth
-from packets.opcode import OpCode
-from packets.message import Message
+
+import typer
+
 from modules.heart_beat_task import HeartBeatTask
 from modules.receive_message_task import ReceiveMsgTask
+from packets.auth import Auth
+from packets.message import Message
+from packets.opcode import OpCode
 
 app = typer.Typer()
 MAX_LENGTH = 1024
 
 
 @app.command()
-async def client(host: str, port: int):
+def client(host: str, port: int):
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     address = (host, port)
 
@@ -65,3 +67,7 @@ def running(sock: socket.socket, address: (str, int), name: str, key: str):
             break
         msg_packet = Message(name, message, key)
         sock.sendto(msg_packet, address)
+
+
+if __name__ == "__main__":
+    app()

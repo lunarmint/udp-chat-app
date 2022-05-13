@@ -2,28 +2,28 @@ import socket
 import time
 from threading import Event
 
-from modules import utils
-from modules.check_connection import CheckConnection
 import typer
 
+from modules import utils
+from modules.check_connection import CheckConnection
 from modules.user import User
 from modules.utils import xor_decode
+from packets.ack import Ack
 from packets.message import Message
 from packets.opcode import OpCode
-from packets.ack import Ack
 
 app = typer.Typer()
 MAX_LENGTH = 1024
 
 
 @app.command()
-async def server(port: int):
+def server(port: int):
     sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
     try:
         sock.bind(("", port))
         typer.echo(f"[STARTING] {socket.gethostname()} is listening on {port}/udp")
-        dataset = dict()
-        active_users = list()
+        dataset = {}
+        active_users = []
         running(sock, dataset, active_users)
     except socket.error as error:
         typer.echo(typer.style(f"[SERVER] Failed to create socket: {error}", fg=typer.colors.RED))
@@ -85,3 +85,7 @@ def running(sock: socket.socket, dataset: {}, active_users: []):
                 typer.echo(typer.style("Receive unknown data: " + data, fg=typer.colors.RED))
 
         stopFlag.set()
+
+
+if __name__ == "__main__":
+    app()
