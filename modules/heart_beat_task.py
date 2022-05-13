@@ -16,7 +16,7 @@ class HeartBeatTask(Thread):
     def run(self):
         index = 1
         while not self.stopped.wait(self.delay):
-            heartbeat_packet = Heartbeat(index, self.key)
+            heartbeat_packet = Heartbeat(index, self.key).construct_datagram()
             self.sock.sendto(heartbeat_packet, self.address)
             index += 1
         typer.echo(typer.style("DISCONNECTED!", fg=typer.colors.RED))

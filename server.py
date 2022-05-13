@@ -72,7 +72,7 @@ def running(sock: socket.socket, dataset: {}, active_users: []):
                 message = str(data[1:]).split("\t")
                 user_name, msg = message[0], message[1]
                 for user in active_users:
-                    msg_packet = Message(user_name, msg, user.key)
+                    msg_packet = Message(user_name, msg, user.key).construct_datagram()
                     sock.sendto(msg_packet, user.address)
             elif opcode == OpCode.Heartbeat.value:
                 user = dataset.get(address)

@@ -65,7 +65,7 @@ def running(sock: socket.socket, address: (str, int), name: str, key: str):
             stopFlag.set()
             connected.set()
             break
-        msg_packet = Message(name, message, key)
+        msg_packet = Message(name, message, key).construct_datagram()
         sock.sendto(msg_packet, address)
 
 
