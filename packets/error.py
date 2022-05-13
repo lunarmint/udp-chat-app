@@ -1,6 +1,5 @@
 from enum import Enum
-from opcode import OpCode
-from utils import xor_encode
+from packets.opcode import OpCode
 
 
 class ErrorCode(Enum):
@@ -16,13 +15,12 @@ class ErrorCode(Enum):
 
 
 class Error:
-    def __init__(self, error: int, key: str):
-        self.opcode = OpCode.error.value
+    def __init__(self, error: int):
+        self.opcode = OpCode.Error.value
         self.error = error
-        self.key = key
 
     def construct_datagram(self) -> bytes:
-        error_name = "error" + str(self.error)
-        error_value = ErrorCode[error_name].value
-        packet = str(self.opcode) + error_value
-        return xor_encode(packet, self.key)
+        error_code = "error" + str(self.error)
+        error_content = ErrorCode[error_code].value
+        packet = str(self.opcode) + error_content
+        return bytearray(packet.encode("utf-8"))

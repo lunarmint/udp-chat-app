@@ -1,10 +1,10 @@
-from opcode import OpCode
-from utils import xor_encode
+from packets.opcode import OpCode
+from modules.utils import xor_encode
 
 
 class Heartbeat:
     def __init__(self, index: int, key: str):
-        self.opcode = OpCode.heartbeat.value
+        self.opcode = OpCode.Heartbeat.value
         self.index = index
         self.key = key
 
