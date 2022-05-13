@@ -64,21 +64,20 @@ def running(sock: socket.socket, dataset: {}, active_users: []):
             else:
                 typer.echo(typer.style("Receive unknown data: " + data, fg=typer.colors.RED))
         else:
-            user = dataset.get(address)
-            data = xor_decode(data, user.key, as_bytes=False)
+            main_user = dataset.get(address)
+            data = xor_decode(data, main_user.key, as_bytes=False)
             opcode = int(data[0])
-
             if opcode == OpCode.Msg.value:
                 message = str(data[1:]).split("\t")
                 user_name, msg = message[0], message[1]
                 for user in active_users:
-                    msg_packet = Message(user_name, msg, user.key).construct_datagram()
-                    sock.sendto(msg_packet, user.address)
+                    if user is not main_user:
+                        msg_packet = Message(user_name, msg, user.key).construct_datagram()
+                        sock.sendto(msg_packet, user.address)
             elif opcode == OpCode.Heartbeat.value:
-                user = dataset.get(address)
-                user.update_heartbeat()
-                if user not in active_users:
-                    active_users.append(user)
+                main_user.update_heartbeat()
+                if main_user not in active_users:
+                    active_users.append(main_user)
             elif opcode == OpCode.Error.value:
                 typer.echo(typer.style(data[1:], fg=typer.colors.RED))
             else:

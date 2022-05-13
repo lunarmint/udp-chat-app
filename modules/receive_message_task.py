@@ -15,7 +15,7 @@ class ReceiveMsgTask(Thread):
         self.key = key
 
     def run(self):
-        while not self.stopped:
+        while not self.stopped.wait(0):
             data, _ = self.sock.recvfrom(MAX_LENGTH)
             data = xor_decode(data, self.key, as_bytes=False)
             opcode = int(data[0])
