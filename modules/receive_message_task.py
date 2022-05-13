@@ -2,7 +2,7 @@ from socket import socket
 from threading import Thread, Event
 import typer
 from packets.opcode import OpCode
-from utils import xor_decode
+from modules.utils import xor_decode
 
 MAX_LENGTH = 1024
 
