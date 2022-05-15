@@ -2,9 +2,9 @@ from packets.opcode import OpCode
 from modules.utils import xor_encode
 
 
-class Message:
+class YellowNotify:
     def __init__(self, content: str, key: str):
-        self.opcode = OpCode.Msg.value
+        self.opcode = OpCode.Yellow.value
         self.content = content
         self.key = key
 
