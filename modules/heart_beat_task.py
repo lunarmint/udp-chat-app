@@ -19,4 +19,3 @@ class HeartBeatTask(Thread):
             heartbeat_packet = Heartbeat(index, self.key).construct_datagram()
             self.sock.sendto(heartbeat_packet, self.address)
             index += 1
-        typer.echo(typer.style("DISCONNECTED!", fg=typer.colors.RED))
